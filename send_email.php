@@ -1,32 +1,35 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the form data
-    $name = htmlspecialchars($_POST['name']);
-    $visitor_email = htmlspecialchars($_POST['email']);
+    // Collect and sanitize form data
+    $firstName = htmlspecialchars($_POST['firstName']);
+    $lastName = htmlspecialchars($_POST['lastName']);
+    $email = htmlspecialchars($_POST['email']);
     $phone = htmlspecialchars($_POST['phone']);
+    $service = htmlspecialchars($_POST['service']);
+    $date = htmlspecialchars($_POST['date']);
+    $time = htmlspecialchars($_POST['time']);
     $message = htmlspecialchars($_POST['message']);
-
-    // Set the recipient email address (CHANGE THIS TO YOURS!)
+    
+    // Prepare email content
     $to = "anothercreation0@gmail.com";
-
-    // Set the email subject
-    $subject = "New Contact Form Submission from $name";
-
-    // Build the email content
-    $email_body = "You have received a new message from your website contact form.\n\n".
-                  "Name: $name\n".
-                  "Email: $visitor_email\n".
-                  "Phone: $phone\n".
-                  "Message:\n$message\n";
-
-    // Build the email headers
-    $headers = "From: $visitor_email\r\n";
-    $headers .= "Reply-To: $visitor_email\r\n";
-
-    // Send the email
+    $subject = "New Booking Request from $firstName $lastName";
+    
+    $email_body = "You have received a new booking request:\n\n";
+    $email_body .= "Name: $firstName $lastName\n";
+    $email_body .= "Email: $email\n";
+    $email_body .= "Phone: $phone\n";
+    $email_body .= "Service: $service\n";
+    $email_body .= "Preferred Date: $date\n";
+    $email_body .= "Preferred Time: $time\n";
+    $email_body .= "Message: $message\n";
+    
+    $headers = "From: $email\r\n";
+    $headers .= "Reply-To: $email\r\n";
+    
+    // Send email
     $mail_success = mail($to, $subject, $email_body, $headers);
-
-    // Redirect to a thank you page
+    
+    // Redirect to thank you page
     if ($mail_success) {
         header('Location: thank_you.html');
     } else {
